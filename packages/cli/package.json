@@ -1,0 +1,38 @@
+{
+  "name": "n8n-ready",
+  "version": "1.0.0",
+  "description": "CLI tool for n8n-ready project initialization",
+  "main": "dist/index.js",
+  "bin": {
+    "n8n-ready": "dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --target node18 && cp -r templates dist/",
+    "dev": "tsx src/index.ts",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "fs-extra": "^11.0.0",
+    "node-fetch": "^3.0.0",
+    "public-ip": "^6.0.0"
+  },
+  "devDependencies": {
+    "tsup": "^7.0.0",
+    "tsx": "^3.0.0",
+    "@types/fs-extra": "^11.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "keywords": [
+    "cli",
+    "n8n"
+  ],
+  "author": "",
+  "license": "MIT"
+}

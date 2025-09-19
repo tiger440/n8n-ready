@@ -1,0 +1,34 @@
+# Development files
+*.md
+!README.md
+.gitignore
+.eslintrc*
+.prettierrc*
+tsconfig.json
+.github/
+.vscode/
+*.log
+*.tgz
+
+# Source files (only dist should be published)
+packages/cli/src/
+packages/cli/node_modules/
+packages/cli/package.json
+packages/cli/tsconfig.json
+
+# Test files
+test*/
+**/test*/
+**/*.test.*
+**/*.spec.*
+
+# Environment files
+.env*
+!.env.example
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.DS_Store
+Thumbs.db

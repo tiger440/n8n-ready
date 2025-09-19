@@ -1,0 +1,106 @@
+# Caddyfile for n8n production deployment
+# Automatic HTTPS with Let's Encrypt
+
+{$N8N_HOST} {
+    # Enable automatic HTTPS
+    tls {
+        # Let's Encrypt will be used automatically
+        # For custom certificates, uncomment and configure:
+        # tls /path/to/cert.pem /path/to/key.pem
+    }
+
+    # Security headers
+    header {
+        # HTTPS redirect
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+        # Prevent clickjacking
+        X-Frame-Options "SAMEORIGIN"
+
+        # Prevent content type sniffing
+        X-Content-Type-Options "nosniff"
+
+        # XSS protection
+        X-XSS-Protection "1; mode=block"
+
+        # Referrer policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+
+        # Hide server info
+        -Server
+    }
+
+    # Rate limiting (optional)
+    rate_limit {
+        zone n8n_zone {
+            key {remote_host}
+            events 100
+            window 1m
+        }
+    }
+
+    # Reverse proxy to n8n
+    reverse_proxy n8n:5678 {
+        # Health check
+        health_uri /healthz
+        health_interval 30s
+        health_timeout 10s
+
+        # Headers for proper forwarding
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Port {server_port}
+        header_up X-Forwarded-Proto {scheme}
+
+        # Increase timeouts for long-running workflows
+        timeout 300s
+    }
+
+    # Webhook endpoint with special handling
+    handle /webhook/* {
+        reverse_proxy n8n:5678 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Port {server_port}
+            header_up X-Forwarded-Proto {scheme}
+
+            # Extended timeout for webhooks
+            timeout 600s
+        }
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/n8n.log {
+            roll_size 100mb
+            roll_keep 5
+        }
+        format json
+        level INFO
+    }
+
+    # Error handling
+    handle_errors {
+        @5xx expression {http.error.status_code} >= 500
+        handle @5xx {
+            respond "Service temporarily unavailable" 503
+        }
+
+        @4xx expression {http.error.status_code} >= 400
+        handle @4xx {
+            respond "Page not found" 404
+        }
+    }
+}
+
+# Redirect www to non-www (optional)
+www.{$N8N_HOST} {
+    redir https://{$N8N_HOST}{uri} permanent
+}
+
+# Health check endpoint for load balancers
+:8080 {
+    respond /health "OK" 200
+}

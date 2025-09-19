@@ -1,0 +1,117 @@
+# ============================================================================
+# GitHub Actions Workflow: Release to NPM
+# ============================================================================
+#
+# This workflow automatically publishes the package to NPM when a new release
+# is published on GitHub.
+#
+# SETUP INSTRUCTIONS:
+# 1. Generate an NPM access token:
+#    - Go to https://www.npmjs.com/settings/tokens
+#    - Click "Generate New Token" > "Automation"
+#    - Copy the token (npm_XXXXXXXXXXXXXXXX)
+#
+# 2. Add the token to GitHub Secrets:
+#    - Go to your repository Settings > Secrets and variables > Actions
+#    - Click "New repository secret"
+#    - Name: NPM_TOKEN
+#    - Value: paste your NPM token
+#
+# 3. Create a new release:
+#    - Go to your repository > Releases > "Create a new release"
+#    - Tag: v0.1.0 (or your version)
+#    - Title: "Release v0.1.0"
+#    - Click "Publish release"
+#
+# The workflow will automatically build and publish to NPM.
+# ============================================================================
+
+name: Release to NPM
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write # For npm provenance
+
+    steps:
+      # Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Node.js with npm registry
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Setup pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      # Get pnpm store directory
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      # Cache pnpm dependencies
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Build the project
+      - name: Build project
+        run: pnpm build
+
+      # Verify build artifacts
+      - name: Verify build artifacts
+        run: |
+          echo "=== Checking build artifacts ==="
+          ls -la packages/cli/dist/
+          echo ""
+          echo "=== Checking templates ==="
+          ls -la packages/cli/dist/templates/
+          echo ""
+          echo "=== Testing CLI ==="
+          node packages/cli/dist/index.js --help
+
+      # Test package contents
+      - name: Test package contents
+        run: |
+          echo "=== Testing package contents ==="
+          npm pack --dry-run
+          echo ""
+          echo "=== Package size ==="
+          npm pack --dry-run | grep -E "(npm notice|files:|unpacked size:)"
+
+      # Publish to NPM
+      - name: Publish to NPM
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Notify success
+      - name: Notify success
+        run: |
+          echo "🎉 Successfully published n8n-ready v${{ github.event.release.tag_name }} to NPM!"
+          echo "📦 Package: https://www.npmjs.com/package/n8n-ready"
+          echo "🚀 Install: npx n8n-ready init my-project"

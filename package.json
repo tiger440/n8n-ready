@@ -1,5 +1,5 @@
 {
-  "name": "n8n-ready",
+  "name": "@tiger440/n8n-ready",
   "version": "0.1.0",
   "description": "CLI tool to bootstrap self-hosted n8n environments in seconds",
   "type": "module",
@@ -32,13 +32,13 @@
     "name": "n8n-ready contributors"
   },
   "license": "MIT",
-  "homepage": "https://github.com/YOUR_USERNAME/n8n-ready#readme",
+  "homepage": "https://github.com/tiger440/n8n-ready#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YOUR_USERNAME/n8n-ready.git"
+    "url": "git+https://github.com/tiger440/n8n-ready.git"
   },
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/n8n-ready/issues"
+    "url": "https://github.com/tiger440/n8n-ready/issues"
   },
   "engines": {
     "node": ">=18.0.0"

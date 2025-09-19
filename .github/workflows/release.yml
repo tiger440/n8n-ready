@@ -103,9 +103,29 @@ jobs:
           echo "=== Package size ==="
           npm pack --dry-run | grep -E "(npm notice|files:|unpacked size:)"
 
+      # Debug NPM authentication
+      - name: Debug NPM authentication
+        run: |
+          echo "=== Checking NPM authentication ==="
+          echo "Registry: $(npm config get registry)"
+          echo "Auth token configured: $([[ -n "$NODE_AUTH_TOKEN" ]] && echo "Yes" || echo "No")"
+          npm whoami || echo "Not authenticated"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Test publish with dry-run first
+      - name: Test publish (dry-run)
+        run: |
+          echo "=== Testing npm publish with dry-run ==="
+          npm publish --dry-run --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       # Publish to NPM
       - name: Publish to NPM
-        run: npm publish --access public --provenance
+        run: |
+          echo "=== Publishing to NPM ==="
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

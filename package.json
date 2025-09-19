@@ -10,7 +10,7 @@
     "packages/cli/dist"
   ],
   "scripts": {
-    "build": "tsup packages/cli/src/index.ts --format esm --dts --out-dir packages/cli/dist --external commander --external fs-extra --external public-ip --external node-fetch && cp -r packages/cli/templates packages/cli/dist/",
+    "build": "tsup packages/cli/src/index.ts --format esm --dts --out-dir packages/cli/dist --external commander --external fs-extra --external public-ip && cp -r packages/cli/templates packages/cli/dist/",
     "prepare": "pnpm build",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -53,7 +53,6 @@
   "dependencies": {
     "commander": "^11.0.0",
     "fs-extra": "^11.0.0",
-    "node-fetch": "^3.0.0",
     "public-ip": "^6.0.0"
   },
   "devDependencies": {

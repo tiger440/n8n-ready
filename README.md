@@ -1,11 +1,13 @@
-# n8n-ready 🚀
+# @tiger440/n8n-ready 🚀
 
 > **CLI tool to bootstrap self-hosted n8n environments in seconds**
 
-[![npm version](https://badge.fury.io/js/n8n-ready.svg)](https://www.npmjs.com/package/@tiger440/n8n-ready)
+[![npm version](https://badge.fury.io/js/@tiger440%2Fn8n-ready.svg)](https://www.npmjs.com/package/@tiger440/n8n-ready)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-n8n-ready is a command-line tool that helps you quickly set up production-ready or development n8n instances with Docker Compose. No more manual configuration - get your workflow automation platform running in minutes with best practices baked in.
+**@tiger440/n8n-ready** is a command-line tool that helps you quickly set up production-ready or development n8n instances with Docker Compose. No more manual configuration - get your workflow automation platform running in minutes with best practices baked in.
+
+> 💡 **Usage Note**: Use `npx @tiger440/n8n-ready` for one-time usage, or install globally with `npm install -g @tiger440/n8n-ready` to use the shorter `n8n-ready` command.
 
 ## ✨ Features
 
@@ -23,20 +25,23 @@ n8n-ready is a command-line tool that helps you quickly set up production-ready 
 No installation required! Use npx to run directly:
 
 ```bash
-npx n8n-ready init my-n8n-project
+npx @tiger440/n8n-ready init my-n8n-project
 ```
 
 Or install globally:
 
 ```bash
-npm install -g n8n-ready
+npm install -g @tiger440/n8n-ready
+
+# Then use as:
+n8n-ready init my-project --profile local
 ```
 
 ### Basic Usage
 
 ```bash
 # Create a new project
-npx n8n-ready init my-project --profile local
+npx @tiger440/n8n-ready init my-project --profile local
 
 # Enter the project directory
 cd my-project
@@ -58,11 +63,11 @@ n8n-ready up
 
 ### `init <project-name> [options]`
 
-Initialize a new n8n-ready project.
+Initialize a new project with n8n-ready.
 
 ```bash
-npx n8n-ready init my-project --profile local   # Development setup
-npx n8n-ready init my-project --profile prod    # Production setup
+npx @tiger440/n8n-ready init my-project --profile local   # Development setup
+npx @tiger440/n8n-ready init my-project --profile prod    # Production setup
 ```
 
 **Options:**
@@ -180,7 +185,7 @@ mkdir -p /opt/n8n && cd /opt/n8n
 
 ```bash
 # Create production project
-npx n8n-ready init production --profile prod
+npx @tiger440/n8n-ready init production --profile prod
 
 # Enter project directory
 cd production

@@ -100,8 +100,8 @@ jobs:
           echo "=== Testing package contents ==="
           npm pack --dry-run
           echo ""
-          echo "=== Package size ==="
-          npm pack --dry-run | grep -E "(npm notice|files:|unpacked size:)"
+          echo "=== Package size summary ==="
+          npm pack --dry-run | grep -E "(npm notice.*size|npm notice.*files)" || echo "Size info not found in npm pack output"
 
       # Debug NPM authentication
       - name: Debug NPM authentication

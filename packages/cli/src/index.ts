@@ -25,7 +25,7 @@ async function initProject(projectName: string, options: { profile: string }) {
   }
 
   const projectDir = path.resolve(projectName);
-  const templateDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'templates', profile);
+  const templateDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates', profile);
 
   try {
     // Check if project directory already exists

@@ -1,6 +1,6 @@
 {
   "name": "@tiger440/n8n-ready",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI tool to bootstrap self-hosted n8n environments in seconds",
   "type": "module",
   "bin": {

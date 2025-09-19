@@ -2,7 +2,7 @@
 
 > **CLI tool to bootstrap self-hosted n8n environments in seconds**
 
-[![npm version](https://badge.fury.io/js/n8n-ready.svg)](https://www.npmjs.com/package/n8n-ready)
+[![npm version](https://badge.fury.io/js/n8n-ready.svg)](https://www.npmjs.com/package/@tiger440/n8n-ready)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 n8n-ready is a command-line tool that helps you quickly set up production-ready or development n8n instances with Docker Compose. No more manual configuration - get your workflow automation platform running in minutes with best practices baked in.
